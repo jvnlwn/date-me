@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    background: #343434;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+* {
+    vertical-align: top;
+}
+
+.wrapper {
+    width: 940px;
+    padding: 10px;
+    margin: 15px auto 0;
+    background: #fafafa;
+
+    .choose {
+        width: 49.4%;
+        margin-bottom: 10px;
+        text-align: center;
+        float: left;
+        display: inline-block;
+        background: rgb(241, 236, 173);
+        
+        h2 {
+            font-size: 44px;
+            font-weight: 100;
+            margin-bottom: 10px;
+        }
+
+        hr {
+            width: 80%;
+            border: none;
+            border-top: 1px solid #333;
+        }
+
+        .stuff {
+            height: 165px;
+        }
+
+    }
+
+    .float-right {
+        float: right;
+    }
+
+    .ruminate {
+        margin-bottom: 10px;
+        font-size: 100px;
+        font-weight: 100;
+        text-align: center;
+        background: rgb(212, 212, 235);
+    }
+
+    .schedule {
+
+        .weekday {
+            width: 12.5%;
+            height: 350px;
+            margin-right: 15px;
+            display: inline-block;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            .day {
+                height: 10%;
+                color: #FFF;
+                font-size: 24px;
+                font-weight: 100;
+                line-height: 35px;
+                text-align: center;
+                background: #000;
+            }
+
+            .slots {
+                height: 90%;
+                background: green;
+                overflow: auto;
+            }
+        }
+    }
+}
+
+
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+
+.cf:after {
+    clear: both;
+}
