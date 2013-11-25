@@ -1,25 +1,68 @@
-var days = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
-
-var hours = ['8', '9', '10', '11', '12', '1', '2', '3', '4', '5']
-var increments = ['00', '15', '30', '45']
-
 var dayTemplate = _.template($('#days').text())
-var incrementTemplate = _.template($('#slots').text())
 
+var weekTracker = 0;
 
 $(document).ready(function() {
 
-	days.forEach(function(day) {
-		$('.schedule').append(dayTemplate({day: day}))
-	})
+	displayWeeks(0)
 
-	hours.forEach(function(hour) {
-		increments.forEach(function(increment) {
-			$('.slots').append(incrementTemplate({options: {
-				hour: hour,
-				increment: increment
-			}}))
-		})
-	})
+	upDown('up');
+	upDown('down');
 	
 })
+
+function upDown(direction) {
+	$('.' + direction).click(function() {
+
+		if (direction === 'up') {
+
+			var firstDay = $('.schedule').children().first().children().first().children().last().text();
+			var today = moment().format('MMM') + ' ' + moment().format('D');
+
+			if (firstDay !== today) {
+				
+				weekTracker -= 1;
+
+				$('.schedule').html('');
+
+				displayWeeks(Math.abs(weekTracker * 14))
+
+			}
+
+		} else {
+				weekTracker += 1;
+
+				$('.schedule').html('');
+
+				displayWeeks(Math.abs(weekTracker * 14))
+
+		}
+			$('.wrapper').append('<div class="cf"></div>')
+	})
+}
+
+
+function displayWeeks(start) {
+
+	for (i = start; i < (start + 14); i++) {
+
+		var options = {
+			day:   moment().day(moment().day() + i).format('dd'),
+			month: moment().day(moment().day() + i).format('MMM'),
+			date:  moment().day(moment().day() + i).format('D')
+		}
+
+		$('.schedule').append(dayTemplate({options: options}))
+
+		if (($('.weekday').length === 7 || $('.weekday').length === 14) && i !== 0) {
+			$('.schedule').children().last().css('margin-right', '0')
+		}
+
+		$('.wrapper').append('<div class="cf"></div>')
+
+	}
+}
+
+
+
+
