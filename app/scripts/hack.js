@@ -1,6 +1,105 @@
-var setMonths = monthSetter(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
+$(document).ready(function() {
+	var setMonths = monthSetter(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
 
-daysInMonth(setMonths(moment().format('MMMM')))
+	// var appendStuff = appendToDom(daysAndYears(setMonths(moment().format('MMMM'))))
+
+	changeDate({
+		month: moment().format('MMMM'),
+		year: moment().format('YYYY')
+	}, moment().format('D'))
+
+	var changeMonth = appendNext(daysAndYears(setMonths(moment().format('MMMM'))))
+	var changeDay = appendNextNumber(daysAndYears(setMonths(moment().format('MMMM'))))
+
+	$('.month-up').click(function() {
+		changeMonth('month',+1)	
+	})	
+
+	$('.month-down').click(function() {
+		changeMonth('month',-1)	
+	})
+
+	$('.days-up').click(function() {
+		changeDay(+1)	
+	})
+
+	$('.days-down').click(function() {
+		changeDay(-1)	
+	})
+})
+
+
+// appendStuff('month')
+// appendStuff('days')
+// appendStuff('year')
+
+
+// function appendToDom(data) {
+// 	console.log('data ', data)
+// 	return function(el) {
+// 		return _.each(data, function(month) {
+// 			$('.' + el).append('<div>' + month[el] + '</div>')
+// 		})
+// 	}
+// }
+
+function checkLastDay(month) {
+	dayVal = parseInt($('.days').text());
+	dayMax = month.days
+
+	if (dayVal > dayMax) {
+		dayVal = dayMax;
+	}
+
+	return dayVal
+}
+
+function changeDate(month, dayVal) {
+	$('.month').html('<div>' + month.month + '</div>')
+	$('.days').html('<div>' + dayVal + '</div>')
+	$('.year').html('<div>' + month.year + '</div>')
+}
+
+function appendNext(data) {
+	return function(el, direction) {
+		var relative = $('.' + el).text();
+		var month = _.find(data, function(month) {return month[el] === relative})
+		var index = data.indexOf(month)
+
+		if (existy(data[index + direction])) {
+			var newMonth = data[index + direction]
+			return changeDate(newMonth, checkLastDay(newMonth))
+		}
+
+		return
+	}
+}
+
+function appendNextNumber(data) {
+	return function(direction) {
+		var monthName = $('.month').text();
+		var relative = parseInt($('.days').text());
+		var month = _.find(data, function(month) {return month['month'] === monthName})
+		var index = data.indexOf(month)
+
+		if ((relative + direction) < 1) {
+			if (index > 0) {
+				return changeDate(data[index - 1], data[index - 1].days)
+			} else {
+				return
+			}
+		}
+
+		if ((relative + direction) > month.days) {
+			if (index < (data.length - 1)) {
+				return changeDate(data[index + 1], 1)
+			} else {
+				return
+			}
+		}
+		return $('.days').html('<div>' + (relative + direction) + '</div>')
+	}
+}
 
 function monthSetter(months) {
 	return function(startingMonth) {
@@ -8,18 +107,18 @@ function monthSetter(months) {
 	}
 }
 
-function daysInMonth(months) {
+function daysAndYears(months) {
 	var year = determineYear(moment().get('years'))
 
 	var months = months.slice()
-	var days = [
+	var daysInMonth = [
 		{
 			month: 'January',
 			days: 31,
 		},
 		{
 			month: 'February',
-			days: isLeapYear(months),
+			days: 28,
 		},
 		{
 			month: 'March',
@@ -66,14 +165,21 @@ function daysInMonth(months) {
 	var newDays = []
 
 	months.forEach(function(month) {
-		newDays.push(_.find(days, function(day) {
+		newDays.push(_.find(daysInMonth, function(day) {
 			return day.month === month
 		}))
 
 		newDays[newDays.length - 1].year = year(month)
 	})
 
-	console.log(newDays)
+	// check leap year
+	var feb = _.find(newDays, function(month) {
+		return month.month === 'February'
+	})
+
+	feb.days = moment([feb.year]).isLeapYear() ? 29 : 28;
+
+	return newDays
 }
 
 function determineYear(year) {
@@ -88,13 +194,8 @@ function determineYear(year) {
 	}
 }
 
-function isLeapYear(months) {
-
-	if (months.indexOf('February') < months.indexOf('December')) {
-		return moment().isLeapYear() ? 29 : 28;	
-	} else {
-		return moment().add('years', 1).isLeapYear() ? 29 : 28
-	}
+function existy(item) {
+	return item && true
 }
 
 // get today's date
