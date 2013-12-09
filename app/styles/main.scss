@@ -16,11 +16,31 @@ body {
     background: #fafafa;
     position: relative;
 
+    .hide-overflow {
+        height: 100px;
+        position: relative;
+        overflow: hidden;
+        background: blue;
+
+        .months {
+            top: 0;
+            position: absolute;
+            -webkit-transition: top .1s ease;
+        }
+    }
+
     .month, .days, .year {
         width: 100px;
         padding: 10px;
         text-align: center;
         display: inline-block;
+    }
+
+    .top-spacer {
+        width: 100px;
+        height: 35px;
+        padding: 0 10px;
+        background: purple;
     }
 
     .up, .down {

@@ -8,30 +8,95 @@ $(document).ready(function() {
 		year: moment().format('YYYY')
 	}, moment().format('D'))
 
-	var changeMonth = appendNext(daysAndYears(setMonths(moment().format('MMMM'))))
+
+	var changeMonth = appendNextMonth(daysAndYears(setMonths(moment().format('MMMM'))))
 	var changeDay = appendNextNumber(daysAndYears(setMonths(moment().format('MMMM'))))
 
-	$('.month-up').click(function() {
-		changeMonth('month',+1)	
-	})	
 
-	$('.month-down').click(function() {
-		changeMonth('month',-1)	
-	})
+	// $('.month-up').on('mousedown', function() {
+	// 	changeMonth('month',+1)
+	// 	// $('.months').css('top', (parseInt($('.months').css('top').slice(0, -2)) - 35).toString() + 'px')
 
-	$('.days-up').click(function() {
-		changeDay(+1)	
-	})
+	// 	var handler = setInterval(function() {
+	// 		changeMonth('month',+1)
+	// 		// $('.months').css('top', (parseInt($('.months').css('top').slice(0, -2)) - 35).toString() + 'px')
 
-	$('.days-down').click(function() {
-		changeDay(-1)	
-	})
+	// 	}, 125)
+
+	// 	$('.month-up').one('mouseup', function() {
+	// 		clearInterval(handler)
+	// 	})
+
+	// })	
+
+	buttonClick('month-up',   changeMonth, +1)
+	buttonClick('month-down', changeMonth, -1)
+	buttonClick('days-up',    changeDay,   +1)
+	buttonClick('days-down',  changeDay,   -1)
+
+
+	// $('.month-up').click(function() {
+	// 	changeMonth('month',+1)	
+	// })	
+
+	// $('.month-down').click(function() {
+	// 	changeMonth('month',-1)	
+	// })
+
+	// $('.days-up').click(function() {
+	// 	changeDay(+1)	
+	// })
+
+	// $('.days-down').click(function() {
+	// 	changeDay(-1)	
+	// })
+
+	// appendStuff('month')
+	// appendStuff('days')
+	// appendStuff('year')
 })
 
+function buttonClick(target, fun, operator) {
+	$('.' + target).on('mousedown', function(e) {
+		fun(operator)
 
-// appendStuff('month')
-// appendStuff('days')
-// appendStuff('year')
+
+				var handler = setInterval(function() {
+					console.log(operator)
+					fun(operator)
+
+				}, 125)
+
+				$('.' + target).one('mouseup', function() {
+					clearInterval(handler)
+				})		
+
+	})
+}
+
+// function buttonClick(target, fun, operator) {
+// 	$('.' + target).on('mousedown', function(e) {
+// 		fun(operator)
+
+// 		setTimeout(function(){
+// 			if (e.which === 1) {
+
+// 				var handler = setInterval(function() {
+// 					console.log(operator)
+// 					fun(operator)
+
+// 				}, 125)
+
+// 				$('.' + target).one('mouseup', function() {
+// 					clearInterval(handler)
+// 				})		
+// 			} else {
+// 				clearInterval(handler)
+// 			}
+// 		},100)
+// 	})
+// }
+
 
 
 // function appendToDom(data) {
@@ -55,15 +120,24 @@ function checkLastDay(month) {
 }
 
 function changeDate(month, dayVal) {
+
 	$('.month').html('<div>' + month.month + '</div>')
 	$('.days').html('<div>' + dayVal + '</div>')
 	$('.year').html('<div>' + month.year + '</div>')
 }
 
-function appendNext(data) {
-	return function(el, direction) {
-		var relative = $('.' + el).text();
-		var month = _.find(data, function(month) {return month[el] === relative})
+// function changeDateNew(data, index, dayVal) {
+
+// 	$('.month').html('<div>' + data[index - 1].month + '</div><div>' + data[index].month + '</div><div>' + data[index + 1].month + '</div>')
+// 	$('.days').html('<div>' + (dayVal - 1) + '</div><div>' + dayVal + '</div><div>' + (dayVal + 1) + '</div>')
+// 	$('.year').html('<div>' + data[index - 1].year + '</div><div>' + data[index].year + '</div><div>' + data[index + 1].year + '</div>')
+// }
+
+
+function appendNextMonth(data) {
+	return function(direction) {
+		var relative = $('.month').text();
+		var month = _.find(data, function(month) {return month['month'] === relative})
 		var index = data.indexOf(month)
 
 		if (existy(data[index + direction])) {
@@ -82,9 +156,14 @@ function appendNextNumber(data) {
 		var month = _.find(data, function(month) {return month['month'] === monthName})
 		var index = data.indexOf(month)
 
+		if (index === 0 && direction < 0 && relative === parseInt(moment().format('D'))) {
+			return
+		}
+
 		if ((relative + direction) < 1) {
 			if (index > 0) {
-				return changeDate(data[index - 1], data[index - 1].days)
+				return changeDate(data[index - 1], data[index - 1].days, data, index - 1)
+				// return changeDateNew(data, index - 1, data[index - 1].days)
 			} else {
 				return
 			}
@@ -92,11 +171,12 @@ function appendNextNumber(data) {
 
 		if ((relative + direction) > month.days) {
 			if (index < (data.length - 1)) {
-				return changeDate(data[index + 1], 1)
+				return changeDate(data[index + 1], 1, data, index + 1)
 			} else {
 				return
 			}
 		}
+		// return changeDateNew(data, index, relative + direction)
 		return $('.days').html('<div>' + (relative + direction) + '</div>')
 	}
 }
