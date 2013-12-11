@@ -1,0 +1,128 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>ruminate</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="stylesheet" href="styles/1e0e5c6c.main.css"/>
+        <script src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+        <div class="wrapper">
+
+            <h1>Date Me</h1>
+
+            <div class="date-selector">
+
+                <div class="date-container">
+
+                    <div class="slider m-slider">
+                        <div class="months">
+                            <div class="spacer m-spacer"></div>
+                            <div class="slot previous-month"></div>
+                            <div class="slot current-month"></div>
+                            <div class="slot next-month"></div>
+                        </div>
+                    </div>
+
+                    <div class="slider d-slider">
+                        <div class="days">
+                            <div class="spacer d-spacer"></div>
+                            <div class="slot previous-day"></div>
+                            <div class="slot current-day"></div>
+                            <div class="slot next-day"></div>
+                        </div>
+                    </div>
+
+                    <div class="month-down down"></div>
+                    <div class="days-down down"></div>
+                    <div class="month-up up"></div>
+                    <div class="days-up up"></div>
+
+
+                    <div class="year">
+                        <div class="slot"></div>
+                        <div class="slot current-year"></div>
+                    </div>
+
+                    <div class="fade-out"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <script type="text/template" id="show-next-month">
+
+            <div class="months">
+                <div class="spacer m-spacer"></div>
+                <div class="slot next-dummy"    ><%= month.monthToHide   %></div>
+                <div class="slot previous-month"><%= month.previousMonth %></div>
+                <div class="slot current-month" ><%= month.currentMonth  %></div>
+                <div class="slot next-month"    ><%= month.nextMonth     %></div>
+            </div>
+
+        </script>
+
+
+        <script type="text/template" id="show-next-day">
+
+            <div class="days">
+                <div class="spacer d-spacer"></div>
+                <div class="slot next-dummy"  ><%= month.dayToHide   %></div>
+                <div class="slot previous-day"><%= month.previousDay %></div>
+                <div class="slot current-day" ><%= month.currentDay  %></div>
+                <div class="slot next-day"    ><%= month.nextDay     %></div>
+            </div>
+
+        </script>
+
+        <script type="text/template" id="show-previous-month">
+
+            <div class="months">
+                <div class="spacer m-spacer"></div>
+                <div class="slot previous-month"><%= month.previousMonth %></div>
+                <div class="slot current-month" ><%= month.currentMonth  %></div>
+                <div class="slot next-month"    ><%= month.nextMonth     %></div>
+                <div class="slot previous-dummy"><%= month.monthToShow   %></div>
+            </div>
+
+        </script>
+
+        <script type="text/template" id="show-previous-day">
+
+            <div class="days">
+                <div class="spacer d-spacer"></div>
+                <div class="slot previous-day"  ><%= month.previousDay %></div>
+                <div class="slot current-day"   ><%= month.currentDay  %></div>
+                <div class="slot next-day"      ><%= month.nextDay     %></div>
+                <div class="slot previous-dummy"><%= month.dayToShow   %></div>
+            </div>
+
+        </script>
+
+        <script src="scripts/ea036685.vendor.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <!-- <script>
+            // (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            // function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            // e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            // e.src='//www.google-analytics.com/analytics.js';
+            // r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            // ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script> -->
+
+        <script src="scripts/d1d74ac5.main.js"></script>
+</body>
+</html>
