@@ -1,6 +1,6 @@
 $month-width: 120px;
 $day-width: 40px;
-$overall-width: 220px;
+$overall-width: 240px;
 $overall-height: 90px;
 
 body {
@@ -14,20 +14,28 @@ body {
     vertical-align: top;
 }
 
+h1 {
+    color: #fafafa;
+    text-align: center;
+    font-weight: 100;
+    font-size: 160px;
+    margin: 50px 0 50px;
+}
+
 .wrapper {
     width: 940px;
     padding: 10px;
     margin: 15px auto 0;
-    background: #fafafa;
-    position: relative;
 
     .date-selector {
         width: $overall-width;
         height: $overall-height;
+        padding: 10px 0;
+        border-radius: 4px;
         color: #343434;
+        background: #fafafa;
         margin: 0 auto;
-        position: relative;
-        overflow: hidden;
+        font-weight: 200;
 
         .slider {
             position: absolute;
@@ -60,7 +68,7 @@ body {
 
     .year {
         position: absolute;
-        right: 0;
+        right: 20px;
     }
 
     .slot {
@@ -75,5 +83,11 @@ body {
         bottom: 0;
         background: linear-gradient(to bottom, rgba(250,250,250, 1) 0%, rgba(250,250,250, 0) 40%, rgba(250,250,250, 0) 60%, rgba(250,250,250,1) 100%);
     }
+}
+
+.date-container {
+    overflow: hidden;
+    position: relative;
+    height: $overall-height;
 }
 
