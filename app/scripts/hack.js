@@ -1,9 +1,13 @@
 $(document).ready(function() {
 	var setMonths = monthSetter(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
 
-	// var appendStuff = appendToDom(daysAndYears(setMonths(moment().format('MMMM'))))
+	changeDate(daysAndYears(setMonths(moment().format('MMMM')))[0], parseInt(moment().format('D')), +1);
 
-	changeDate(daysAndYears(setMonths(moment().format('MMMM')))[0], parseInt(moment().format('D')))
+	setPosition(365)
+
+	setTimeout(function() {
+		$('.slider').css('-webkit-transition', 'all .15s ease')
+	}, 100)
 
 	var changeMonth = appendNextMonth(daysAndYears(setMonths(moment().format('MMMM'))))
 	var changeDay = appendNextNumber(daysAndYears(setMonths(moment().format('MMMM'))))	
@@ -12,37 +16,22 @@ $(document).ready(function() {
 	buttonClick('month-down', changeMonth, -1)
 	buttonClick('days-up',    changeDay,   +1)
 	buttonClick('days-down',  changeDay,   -1)
-
-	// appendStuff('month')
-	// appendStuff('days')
-	// appendStuff('year')
 })
 
+function setPosition(num) {
+	$('.d-spacer').css('height',    ((num - 1) *30).toString() + 'px')
+	$('.d-slider').css('top', '-' + ((num) *30).toString() + 'px')
+}
+
 function buttonClick(target, fun, operator) {
-	$('.' + target).on('mousedown', function(e) {
+	$('.' + target).on('mousedown', function() {
 		fun(operator)
-
-		var handler = setInterval(function() {
-			console.log(operator)
-			fun(operator)
-
-		}, 175)
-
-		$('.' + target).one('mouseup', function() {
-			clearInterval(handler)
-		})		
-
 	})
 }
 
-// function appendToDom(data) {
-// 	console.log('data ', data)
-// 	return function(el) {
-// 		return _.each(data, function(month) {
-// 			$('.' + el).append('<div>' + month[el] + '</div>')
-// 		})
-// 	}
-// }
+function slide(target) {
+	if (target ) {}
+}
 
 function checkLastDay(month) {
 	dayVal = parseInt($('.current-day').text());
@@ -55,22 +44,33 @@ function checkLastDay(month) {
 	return dayVal
 }
 
-function changeDate(month, dayVal) {
+function changeDate(month, dayVal, direction) {
+
+	var showTemplates = [];
+
+	var showPreviousMonth = _.template($('#show-previous-month').text())
+	var showPreviousDay = _.template($('#show-previous-day').text())
+
+	var showNextMonth = _.template($('#show-next-month').text())
+	var showNextDay = _.template($('#show-next-day').text())
 
 	var previousDayVal = dayVal - 1;
 	var currentDayVal = dayVal;
 	var nextDayVal = dayVal + 1;
 
+	// resets dayVals if current month is selected and dayVal is less than current day val
 	if (month.previousMonth.month === '' && dayVal <= parseInt(moment().format('D'))) {
 		previousDayVal = '';
 		currentDayVal = parseInt(moment().format('D'));
 		nextDayVal = currentDayVal + 1;
 	}
 
+	// show previous months last day if there is a previous month
 	if (currentDayVal === 1 && month.previousMonth.month !== '') {
 		previousDayVal = month.previousMonth.days;
 	}
 
+	// show next month's first day if currently on last day of current month and there is a next month
 	if (currentDayVal === month.days) {
 
 		if (month.nextMonth.month !== '') {
@@ -80,21 +80,95 @@ function changeDate(month, dayVal) {
 		}
 	}
 
-	// set previous month and day
-	$('.previous-month').text(month.previousMonth.month)
-	$('.previous-day').text(previousDayVal)
+	var monthData = {
+		previousMonth: month.previousMonth.month,
+		currentMonth:  month.month,
+		nextMonth:     month.nextMonth.month,
 
-	// set current month and day
-	$('.current-month').text(month.month)
-	$('.current-day').text(currentDayVal)
+		previousDay:   previousDayVal,
+		currentDay:    currentDayVal,
+		nextDay:       nextDayVal
+	}
 
-	// set next month and day
-	$('.next-month').text(month.nextMonth.month)
+	if (direction > 0) {
+
+		// days displayed will change
+		if (currentDayVal != $('.current-day').text()) {
+			showTemplates.push({
+				klass:    'd',
+				template: showNextDay,
+				dummy: {
+					dayToHide: $('.previous-day').text()
+				},
+				spacerChange: $('.days .previous-dummy').length > 0 ? 0 : 30,
+				sliderChange: -30
+			})
+		}
+
+		// months displayed will change
+		if (month.month !== $('.current-month').text()) {
+			showTemplates.push({
+				klass:    'm',
+				template: showNextMonth,
+				dummy: {
+					monthToHide: $('.previous-month').text()
+				},
+				spacerChange: $('.months .previous-dummy').length > 0 ? 0 : 30,
+				sliderChange: -30
+			})
+		} 
+	}
+
+	if (direction < 0) {
+
+		// days displayed will change
+		if (currentDayVal != $('.current-day').text()) {
+			showTemplates.push({
+				klass:    'd',
+				template: showPreviousDay,
+				dummy: {
+					dayToShow: $('.next-day').text()
+				},
+				spacerChange: $('.days .next-dummy').length > 0 ? 0 : -30,
+				sliderChange: 30,
+			})
+		}
+
+		// months displayed will change
+		if (month.month !== $('.current-month').text()) {
+			showTemplates.push({
+				klass:    'm',
+				template: showPreviousMonth,
+				dummy: {
+					monthToShow: $('.next-month').text()
+				},
+				spacerChange: $('.months .next-dummy').length > 0 ? 0 : -30,
+				sliderChange: 30,
+			})
+		}
+	}
+
+	showTemplates.forEach(function(toShow) {
+
+		var targetSpacer = '.' + toShow.klass + '-spacer';
+		var spacerHeight = parseInt($(targetSpacer).css('height').slice(0, -2))
+
+		var targetSlider = '.' + toShow.klass + '-slider';
+		var sliderTop    = parseInt($(targetSlider).css('top').slice(0, -2))
+
+		$('.' + toShow.klass + '-slider').html(toShow.template({month: $.extend(monthData, toShow.dummy)}));
+
+		$(targetSpacer).css('height', (spacerHeight + toShow.spacerChange).toString() + 'px')
+		$(targetSlider).css('top', (sliderTop + toShow.sliderChange).toString() + 'px');
+		
+	})
+
+	// some times these must be done, so who cares to set the params
 	$('.next-day').text(nextDayVal)
-
-	// set year
+	$('.previous-day').text(previousDayVal)
 	$('.current-year').text(month.year)
 }
+
 
 function appendNextMonth(data) {
 	return function(direction) {
@@ -104,7 +178,7 @@ function appendNextMonth(data) {
 
 		if (existy(data[index + direction])) {
 			var newMonth = data[index + direction]
-			return changeDate(newMonth, checkLastDay(newMonth))
+			return changeDate(newMonth, checkLastDay(newMonth), direction)
 		}
 
 		return
@@ -124,7 +198,7 @@ function appendNextNumber(data) {
 
 		if ((relative + direction) < 1) {
 			if (index > 0) {
-				return changeDate(data[index - 1], data[index - 1].days)
+				return changeDate(data[index - 1], data[index - 1].days, direction)
 			} else {
 				return
 			}
@@ -132,13 +206,13 @@ function appendNextNumber(data) {
 
 		if ((relative + direction) > month.days) {
 			if (index < (data.length - 1)) {
-				return changeDate(data[index + 1], 1)
+				return changeDate(data[index + 1], 1, direction)
 			} else {
 				return
 			}
 		}
 
-		return changeDate(month, relative + direction)
+		return changeDate(month, relative + direction, direction)
 	}
 }
 

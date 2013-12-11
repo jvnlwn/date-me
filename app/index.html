@@ -25,57 +25,87 @@
 
             <div class="date-selector">
 
+                <div class="slider m-slider">
+                    <div class="months">
+                        <div class="spacer m-spacer"></div>
+                        <div class="slot previous-month"></div>
+                        <div class="slot current-month"></div>
+                        <div class="slot next-month"></div>
+                    </div>
+                </div>
+
+                <div class="slider d-slider">
+                    <div class="days">
+                        <div class="spacer d-spacer"></div>
+                        <div class="slot previous-day"></div>
+                        <div class="slot current-day"></div>
+                        <div class="slot next-day"></div>
+                    </div>
+                </div>
+
                 <div class="month-down down"></div>
                 <div class="days-down down"></div>
                 <div class="month-up up"></div>
                 <div class="days-up up"></div>
 
 
-                <div class="months">
-                    <div class="slot faded previous-month"></div>
-                    <div class="slot current-month"></div>
-                    <div class="slot faded next-month"></div>
-                </div>
-                <div class="days">
-                    <div class="slot faded previous-day"></div>
-                    <div class="slot current-day"></div>
-                    <div class="slot faded next-day"></div>
-                </div>
                 <div class="year">
                     <div class="slot"></div>
                     <div class="slot current-year"></div>
                 </div>
 
                 <div class="fade-out"></div>
-
             </div>
-
-
-
-
-
         </div>
 
+        <script type="text/template" id="show-next-month">
 
-
-
-        <script type="text/template" id="days">
-
-            <div class="weekday">
-                <div class="day">
-                    <div><%= options.day %></div>
-                    <div><%= options.month %> <%= options.date %></div>
-                </div>
+            <div class="months">
+                <div class="spacer m-spacer"></div>
+                <div class="slot next-dummy"    ><%= month.monthToHide   %></div>
+                <div class="slot previous-month"><%= month.previousMonth %></div>
+                <div class="slot current-month" ><%= month.currentMonth  %></div>
+                <div class="slot next-month"    ><%= month.nextMonth     %></div>
             </div>
 
         </script>
 
-        <script type="text/template" id="slots">
 
-            <div><%= options.hour %>:<%= options.increment %></div>
+        <script type="text/template" id="show-next-day">
+
+            <div class="days">
+                <div class="spacer d-spacer"></div>
+                <div class="slot next-dummy"  ><%= month.dayToHide   %></div>
+                <div class="slot previous-day"><%= month.previousDay %></div>
+                <div class="slot current-day" ><%= month.currentDay  %></div>
+                <div class="slot next-day"    ><%= month.nextDay     %></div>
+            </div>
 
         </script>
 
+        <script type="text/template" id="show-previous-month">
+
+            <div class="months">
+                <div class="spacer m-spacer"></div>
+                <div class="slot previous-month"><%= month.previousMonth %></div>
+                <div class="slot current-month" ><%= month.currentMonth  %></div>
+                <div class="slot next-month"    ><%= month.nextMonth     %></div>
+                <div class="slot previous-dummy"><%= month.monthToShow   %></div>
+            </div>
+
+        </script>
+
+        <script type="text/template" id="show-previous-day">
+
+            <div class="days">
+                <div class="spacer d-spacer"></div>
+                <div class="slot previous-day"  ><%= month.previousDay %></div>
+                <div class="slot current-day"   ><%= month.currentDay  %></div>
+                <div class="slot next-day"      ><%= month.nextDay     %></div>
+                <div class="slot previous-dummy"><%= month.dayToShow   %></div>
+            </div>
+
+        </script>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->

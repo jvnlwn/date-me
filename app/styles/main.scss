@@ -1,3 +1,8 @@
+$month-width: 120px;
+$day-width: 40px;
+$overall-width: 220px;
+$overall-height: 90px;
+
 body {
     margin: 0;
     background: #343434;
@@ -17,59 +22,58 @@ body {
     position: relative;
 
     .date-selector {
-        width: 370px;
+        width: $overall-width;
+        height: $overall-height;
         color: #343434;
         margin: 0 auto;
         position: relative;
+        overflow: hidden;
+
+        .slider {
+            position: absolute;
+            top: -30px;
+            text-align: center;
+        }
+
+        .m-slider { width: $month-width; left: 0; }
+        .d-slider { width: $day-width; left: $month-width; }
 
         .up, .down {
-            width: 125px;
             height: 30px;
             display: inline-block;
             position: absolute;
             z-index: 10;
         }
 
-        .month-down {
-            left: 0;
-            top: 0;
-        }
+        .month-down { left: 0; top: 0; }
+        .month-up { left: 0; bottom: 0; }
+        .month-down, .month-up { width: $month-width; }
 
-        .month-up {
-            left: 0;
-            bottom: 0;
-        }
-
-        .days-down {
-            left: 120px;
-            top: 0;
-        }
-
-        .days-up {
-            left: 120px;
-            bottom: 0;
-        }
-
+        .days-down { left: 120px; top: 0; }
+        .days-up { left: 120px; bottom: 0; }
+        .days-down, .days-up { width: $day-width; }
     }
 
     .months, .days, .year {
-        width: 120px;
         display: inline-block;
+    }
+
+    .year {
+        position: absolute;
+        right: 0;
     }
 
     .slot {
-        width: 120px;
         height: 30px;
         line-height: 30px;
-        text-align: center;
-        display: inline-block;
     }
 
     .fade-out {
-        width: 400px;
-        height: 90px;
+        width: $overall-width;
+        height: $overall-height;
         position: absolute;
         bottom: 0;
         background: linear-gradient(to bottom, rgba(250,250,250, 1) 0%, rgba(250,250,250, 0) 40%, rgba(250,250,250, 0) 60%, rgba(250,250,250,1) 100%);
     }
 }
+
